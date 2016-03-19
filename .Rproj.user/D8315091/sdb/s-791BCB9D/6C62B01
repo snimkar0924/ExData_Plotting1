@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "\n\n#rm(list=ls())\n\n#read the data\npower_data<-read.table(unz('./data/exdata-data-household_power_consumption.zip',\n                           'household_power_consumption.txt'),header=T, sep=';')\n\n\n#check if read properly\ndim(power_data)\nhead(power_data)\ncolnames(power_data)\n\npower_data[,'Date']<-as.Date(power_data[,'Date'], format='%d/%m/%Y')\n\n##create and save an R object for the data - \n##   this can be loaded next time around, withouut having to read the file again\nsave(power_data, file='./data/power_data.RData')\n\n#use only the required data - 2007-02-01 to 2007-02-02 #from 66638... 2880 rows\npower_data_subset<-power_data[which((power_data[,'Date'] >='2007-02-01') &\n                                    (power_data[,'Date'] <= '2007-02-02')),]\ndim(power_data_subset)\nhead(power_data_subset)\ncolnames(power_data_subset)\n\npower_data_subset$Global_active_power<-as.numeric(power_data_subset$Global_active_power)\npower_data_subset$Global_reactive_power<-as.numeric(power_data_subset$Global_reactive_power)\npower_data_subset$Sub_metering_1<-as.numeric(power_data_subset$Sub_metering_1)\npower_data_subset$Sub_metering_2<-as.numeric(power_data_subset$Sub_metering_2)\npower_data_subset$Sub_metering_3<-as.numeric(power_data_subset$Sub_metering_3)\npower_data_subset$Voltage<-as.numeric(power_data_subset$Voltage)\n\n#Plot 1\nwith(power_data_subset, hist(Global_active_power, col='red', \n                             xlab='Global Active Power (kilowatts)',\n                             main='Global Active Power'))\n\ndev.copy(png, file='./plot1.png', width=480, height=480)\ndev.off()\n\n#Plot 2\nwith(power_data_subset, plot(power_data_subset$Time,\n                             power_data_subset$Global_active_power, \n                             type='l'))\n\n\n#Plot 3\nwith(power_data_subset, {\n      plot(power_data_subset$Sub_metering_1,\n                             ylab='Energy sub metering', type='l')\n      lines(power_data_subset$Sub_metering_2, col='red')\n      lines(power_data_subset$Sub_metering_3, col='blue')\n      legend('topright', pch='-', col=c('black', 'red', 'blue'),legend=c('Sub_metering_1', 'Sub_metering_2', 'Sub_metering_3'))\n             })\n\ndev.copy(png, file='./plot3.png', width=480, height=480)\ndev.off()\n\n\n#Plot 4\npar(mfrow=c(2,2), mar=c(4,4,2,1), oma=c(0,0,2,0))\nwith(power_data_subset, {\n  plot(power_data_subset$Time,\n       power_data_subset$Global_active_power, \n       type='l')\n  plot(power_data_subset$Time,\n       power_data_subset$Voltage, \n       type='l')\n  plot(power_data_subset$Sub_metering_1,\n       ylab='Energy sub metering', type='l')\n  lines(power_data_subset$Sub_metering_2, col='red')\n  lines(power_data_subset$Sub_metering_3, col='blue')\n  plot(power_data_subset$Time,\n       power_data_subset$Global_reactive_power, \n       type='l')\n  mtext(\"All 'em plots...\", outer=T)\n})\n\npower_data_subset$Voltage\n",
+    "created" : 1458369583021.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2464486698",
+    "id" : "6C62B01",
+    "lastKnownWriteTime" : 1458388231,
+    "last_content_update" : 1458388231559,
+    "path" : "D:/GIT_REPOS/DataScienceSpecCoursera/ExData_Plotting1/power.R",
+    "project_path" : "power.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
